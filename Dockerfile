@@ -29,7 +29,11 @@ RUN emerge crossdev sys-libs/db sys-libs/pam sys-apps/iproute2 dev-lang/perl \
     echo 'CCACHE_DIR="/var/tmp/portage/ccache"' >> /etc/portage/make.conf && \
     echo 'CCACHE_TEMPDIR="/var/tmp/portage/ccache"' >> /etc/portage/make.conf \
 && emerge -f binutils gcc linux-headers glibc \
+&& echo "cross-aarch64-unknown-linux-gnu/gcc cxx multilib fortran -mudflap nls openmp -sanitize -vtv" >> /etc/portage/package.use/crossdev \
 && crossdev --stable -t aarch64-unknown-linux-gnu --init-target -oO /usr/local/portage-crossdev \
+&& cd /usr/aarch64-unknown-linux-gnu/etc/portage \
+&& rm -f make.profile \
+&& ln -s /usr/portage/profiles/default/linux/arm64/17.0/desktop make.profile \
 &&  rm -r /usr/portage
 #RUN crossdev -S -v -t armv6j-hardfloat-linux-gnueabi
 CMD ["/usr/local/sbin/distccd-launcher", "--allow", "0.0.0.0/0", "--user", "distcc", "--log-level", "notice", "--log-stderr", "--no-detach"]
