@@ -61,6 +61,7 @@ RUN mkdir -p /etc/portage/repos.conf \
 #RUN echo 'CHOST="aarch64-unknown-linux-gnu-7.3.0"' >> /etc/portage/make.conf
 #RUN gcc-config aarch64-unknown-linux-gnu-gcc
 #RUN bash -c 'source /etc/profile &&  gcc-config  -l'
+# for rpi1
 #RUN crossdev -S -v -t armv6j-hardfloat-linux-gnueabi
 #RUN emerge-webrsync
 #RUN mkdir -pv /usr/local/portage-crossdev
