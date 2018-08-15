@@ -6,7 +6,7 @@ MAINTAINER samuelololol <samuelololol@gmail.com>
 RUN touch /etc/init.d/functions.sh && \
     echo 'EMERGE_DEFAULT_OPTS="--ask=n --jobs=8"' >> /etc/portage/make.conf && \
     echo 'GENTOO_MIRRORS="http://gentoo.osuosl.org/ http://mirrors.evowise.com/gentoo/"' >> /etc/portage/make.conf
-RUN mkdir -p /etc/portage/repos.conf && \
+RUN mkdir -p /etc/portage/repos.conf \
 &&  ( \
     echo '[gentoo]'  && \
     echo 'location = /usr/portage' && \
@@ -55,16 +55,16 @@ RUN mkdir -p /etc/portage/repos.conf && \
 && cd /usr/aarch64-unknown-linux-gnu/etc/portage \
 && rm -f make.profile \
 && ln -s /usr/portage/profiles/default/linux/arm64/17.0/desktop make.profile \
-&& echo 'CHOST="aarch64-unknown-linux-gnu-5.4.0"' >> /etc/portage/make.conf \
-&& gcc-config aarch64-unknown-linux-gnu-5.4.0 \
 &&  rm -r /usr/portage
+RUN bash -c 'source /etc/profile &&  gcc-config  -l'
+#RUN echo 'CHOST="aarch64-unknown-linux-gnu-5.4.0"' >> /etc/portage/make.conf
+#RUN gcc-config aarch64-unknown-linux-gnu-5.4.0
 #RUN crossdev -S -v -t armv6j-hardfloat-linux-gnueabi
 #RUN emerge-webrsync
 #RUN mkdir -pv /usr/local/portage-crossdev
 #RUN ls /etc/env.d/gcc/
 #RUN grep CHOST /etc/portage/make.conf
 #RUN ls /usr/local/portage-crossdev
-#RUN bash -c 'source /etc/profile &&  gcc-config  -l'
 #RUN aarch64-unknown-linux-gnu-gcc --version
 CMD ["/usr/local/sbin/distccd-launcher", "--allow", "0.0.0.0/0", "--user", "distcc", "--log-level", "notice", "--log-stderr", "--no-detach"]
 EXPOSE 3632
