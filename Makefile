@@ -6,7 +6,6 @@ ci: build
 
 run: TAG
 	$(eval TAG := $(shell cat TAG))
-	chmod 777 $(TMP)
 	@docker run --name=distcc \
 	--cidfile="cid" \
 	-d \
