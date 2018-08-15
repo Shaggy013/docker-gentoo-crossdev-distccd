@@ -1,8 +1,27 @@
-FROM samuelololol/docker-gentoo-websync
+FROM gentoo/stage3-amd64
+#FROM samuelololol/docker-gentoo-websync
+    #echo 'PYTHON_TARGETS="${PYTHON_TARGETS} python2_7"' >> /etc/portage/make.conf && \
+    #echo 'PYTHON_SINGLE_TARGET="python2_7"' >> /etc/portage/make.conf && \
 MAINTAINER samuelololol <samuelololol@gmail.com>
-RUN rm /sbin/unix_chkpwd
-#COPY crossdev.conf /etc/portage/repos.conf/crossdev.conf
-RUN emerge crossdev sys-libs/db sys-libs/pam sys-apps/iproute2 dev-lang/perl \
+RUN touch /etc/init.d/functions.sh && \
+    echo 'EMERGE_DEFAULT_OPTS="--ask=n --jobs=8"' >> /etc/portage/make.conf && \
+    echo 'GENTOO_MIRRORS="http://gentoo.osuosl.org/ http://mirrors.evowise.com/gentoo/"' >> /etc/portage/make.conf
+RUN mkdir -p /etc/portage/repos.conf && \
+&&  ( \
+    echo '[gentoo]'  && \
+    echo 'location = /usr/portage' && \
+    echo 'sync-type = rsync' && \
+    echo 'sync-uri = rsync://rsync.us.gentoo.org/gentoo-portage/' && \
+    echo 'auto-sync = yes' \
+    )> /etc/portage/repos.conf/gentoo.conf \
+&&  mkdir -p /usr/portage/{distfiles,metadata,packages} \
+&&  chown -R portage:portage /usr/portage \
+&&  echo "masters = gentoo" > /usr/portage/metadata/layout.conf \
+&&  emerge-webrsync -q \
+&&  eselect news read new \
+&&  env-update \
+&&  rm /sbin/unix_chkpwd \
+&& emerge crossdev sys-libs/db sys-libs/pam sys-apps/iproute2 dev-lang/perl \
     sys-libs/binutils-libs \
     # helps to save time for building later image
 && USE="${USE} crossdev" emerge distcc \
