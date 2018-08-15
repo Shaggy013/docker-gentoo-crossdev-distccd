@@ -56,15 +56,17 @@ RUN mkdir -p /etc/portage/repos.conf \
 && rm -f make.profile \
 && ln -s /usr/portage/profiles/default/linux/arm64/17.0/desktop make.profile \
 &&  rm -r /usr/portage
+#RUN echo 'CHOST="aarch64-unknown-linux-gnu-7.3.0"' >> /etc/portage/make.conf
+RUN echo 'CHOST="aarch64-unknown-linux-gnu"' >> /etc/portage/make.conf
+RUN gcc-config aarch64-unknown-linux-gnu-7.3.0
+#RUN gcc-config aarch64-unknown-linux-gnu-gcc
 RUN bash -c 'source /etc/profile &&  gcc-config  -l'
-#RUN echo 'CHOST="aarch64-unknown-linux-gnu-5.4.0"' >> /etc/portage/make.conf
-#RUN gcc-config aarch64-unknown-linux-gnu-5.4.0
 #RUN crossdev -S -v -t armv6j-hardfloat-linux-gnueabi
 #RUN emerge-webrsync
 #RUN mkdir -pv /usr/local/portage-crossdev
-#RUN ls /etc/env.d/gcc/
 #RUN grep CHOST /etc/portage/make.conf
 #RUN ls /usr/local/portage-crossdev
-#RUN aarch64-unknown-linux-gnu-gcc --version
+RUN ls /etc/env.d/gcc/
+RUN aarch64-unknown-linux-gnu-gcc --version
 CMD ["/usr/local/sbin/distccd-launcher", "--allow", "0.0.0.0/0", "--user", "distcc", "--log-level", "notice", "--log-stderr", "--no-detach"]
 EXPOSE 3632
