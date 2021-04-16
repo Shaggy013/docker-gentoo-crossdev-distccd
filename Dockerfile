@@ -5,7 +5,7 @@ FROM gentoo/stage3-amd64
 MAINTAINER necrose99 <necrose99@gmail.com>
 RUN touch /etc/init.d/functions.sh && \
     echo 'EMERGE_DEFAULT_OPTS="--ask=n --jobs=8"' >> /etc/portage/make.conf && \
-    echo 'GENTOO_MIRRORS="http://gentoo.osuosl.org/ http://mirrors.evowise.com/gentoo/"' >> /etc/portage/make.conf
+    echo 'GENTOO_MIRRORS="http://gentoo.osuosl.org/ http://mirrors.evowise.com/gentoo/"' >> /etc/portage/make.conf \
     echo 'COMMON_FLAGS="-march=znver2"' >> /etc/portage/make.conf
 RUN mkdir -p /etc/portage/repos.conf \
 &&  ( \
