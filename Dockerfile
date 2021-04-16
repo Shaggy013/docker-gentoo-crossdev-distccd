@@ -6,6 +6,7 @@ MAINTAINER necrose99 <necrose99@gmail.com>
 RUN touch /etc/init.d/functions.sh && \
     echo 'EMERGE_DEFAULT_OPTS="--ask=n --jobs=8"' >> /etc/portage/make.conf && \
     echo 'GENTOO_MIRRORS="http://gentoo.osuosl.org/ http://mirrors.evowise.com/gentoo/"' >> /etc/portage/make.conf
+    echo 'COMMON_FLAGS="-march=znver2"' >> /etc/portage/make.conf
 RUN mkdir -p /etc/portage/repos.conf \
 &&  ( \
     echo '[gentoo]'  && \
@@ -51,7 +52,7 @@ RUN mkdir -p /etc/portage/repos.conf \
 	## mutitarget xen likes, makes crossdev offten build more  cleanly 
 && USE="gold multitarget plugins " emerge -f binutils gcc linux-headers glibc gox \
 && USE="llvm_targets_AArch64 llvm_targets_RISCV llvm_targets_AMDGPU llvm_targets_ARM llvm_targets_NVPTX llvm_targets_WebAssembly gold ncurses xar"  emerge -f llvm clang rust\
-&& crossdev --stable -t aarch64-unknown-linux-gnu --init-target -oO /var/db/repos/portage-crossdev \
+&& crossdev --b '~2.35.1' --g '~10.2.0' --k '~5.11' --l '~2.32' -t aarch64-unknown-linux-gnu --init-target -oO /var/db/repos/portage-crossdev \
 && echo "cross-aarch64-unknown-linux-gnu/gcc cxx multilib fortran -mudflap nls openmp -sanitize -vtv" >> /etc/portage/package.use/crossdev \
 && crossdev --stable -t aarch64-unknown-linux-gnu -oO /var/db/repos/portage-crossdev \
 ## place for the 4th pass extra pkgs. 
@@ -60,7 +61,7 @@ RUN mkdir -p /etc/portage/repos.conf \
 && rm -f make.profile \
 && ln -s /var/db/repos/gentoo/profiles/default/linux/arm64/17.0/desktop make.profile \
 && echo 'CHOST="aarch64-unknown-linux-gnu"' >> /etc/portage/make.conf \
-&& gcc-config aarch64-unknown-linux-gnu-7.3.0 \
+&& gcc-config aarch64-unknown-linux-gnu-10.2.0\
 &&  rm -r /var/db/repos/gentoo
 #RUN echo 'CHOST="aarch64-unknown-linux-gnu-7.3.0"' >> /etc/portage/make.conf
 #RUN gcc-config aarch64-unknown-linux-gnu-gcc
